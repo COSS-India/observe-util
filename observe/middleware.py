@@ -134,7 +134,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         
         return organizations[org_index]
     
-    def _extract_customer_from_token(self, request: Request) -> str:
+    def _extract_customer_from_token(self, request: Request) -> Optional[str]:
         """Extract customer name from JWT token in authorization header."""
         auth_header = request.headers.get("authorization", "")
         
@@ -155,7 +155,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
                         print(f"🔑 Using 'sub' field as customer: {sub}")
                     return sub
         
-        return self.config.default_customer
+        return None
     
     def _extract_customer_app(self, request: Request) -> tuple:
         """Extract organization and app from request headers and JWT token."""
@@ -163,13 +163,13 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         organization = self._extract_customer_from_token(request)
         
         # If not found in token, fallback to header
-        if organization == self.config.default_customer:
-            organization = request.headers.get("X-Customer-ID", organization)
+        if organization is None:
+            organization = request.headers.get("X-Customer-ID")
         
         # Extract organization from API key
         auth_header = request.headers.get("authorization", "")
         
-        if auth_header:
+        if auth_header and organization is None:
             # Extract the API key (remove "Bearer " prefix if present)
             api_key = auth_header
             if auth_header.startswith("Bearer "):
@@ -181,11 +181,16 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
             if self.config.debug:
                 print(f"🏢 Mapped API key to organization: {organization}")
         
-        app = request.headers.get("X-App-ID", self.config.default_app)
+        # If still no organization, use "unknown"
+        if organization is None:
+            organization = "unknown"
+            if self.config.debug:
+                print(f"⚠️ No organization found, using: {organization}")
         
-        # Validate app against allowed list
-        if not self.config.is_app_allowed(app):
-            app = self.config.default_app
+        # Get app from header or use "unknown"
+        app = request.headers.get("X-App-ID")
+        if app is None:
+            app = "unknown"
             
         return organization, app
     
