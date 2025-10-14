@@ -22,13 +22,13 @@ from .config import PluginConfig
 from .middleware import ObservabilityMiddleware
 
 # Import adapters for universal framework support
-from .adapters import (
-    FlaskObservabilityAdapter,
-    DjangoObservabilityAdapter,
-    DjangoObservabilityMiddleware,
-    GenericObservabilityAdapter,
-    ManualObservabilityAdapter,
-)
+# from .adapters import (
+#     FlaskObservabilityAdapter,
+#     DjangoObservabilityAdapter,
+#     DjangoObservabilityMiddleware,
+#     GenericObservabilityAdapter,
+#     ManualObservabilityAdapter,
+# )
 
 # Import dashboard utilities
 from .dashboards import (
@@ -43,12 +43,12 @@ __all__ = [
     "MetricsCollector", 
     "PluginConfig",
     "ObservabilityMiddleware",
-    # Framework adapters
-    "FlaskObservabilityAdapter",
-    "DjangoObservabilityAdapter",
-    "DjangoObservabilityMiddleware", 
-    "GenericObservabilityAdapter",
-    "ManualObservabilityAdapter",
+    # # Framework adapters
+    # "FlaskObservabilityAdapter",
+    # "DjangoObservabilityAdapter",
+    # "DjangoObservabilityMiddleware", 
+    # "GenericObservabilityAdapter",
+    # "ManualObservabilityAdapter",
     # Dashboard utilities
     "get_dashboard_path",
     "get_dashboard_json",
