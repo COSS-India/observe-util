@@ -223,15 +223,3 @@ The middleware checks for these fields in order: `organization`, `org`, `name`, 
 - **Resource Utilization**: CPU, memory, GPU metrics per tenant
 
 ---
-
-## 📄 License
-
-This project is part of the COSS AI4X initiative.
-
----
-
-## 🆘 Support
-
-For detailed documentation, refer to the [wiki](./wiki) file in this repository.
-
-For issues or contributions, visit: [https://github.com/COSS-India/observe](https://github.com/COSS-India/observe/tree/main)
