@@ -16,12 +16,6 @@ class PluginConfig:
     enabled: bool = False
     debug: bool = False
     
-    # Customer and app settings
-    customers: List[str] = None
-    apps: List[str] = None
-    default_customer: str = "default"
-    default_app: str = "default"
-    
     # Endpoint settings
     metrics_path: str = "/enterprise/metrics"
     health_path: str = "/enterprise/health"
@@ -44,58 +38,33 @@ class PluginConfig:
     def __post_init__(self):
         """Initialize configuration from environment variables."""
         # Override with environment variables if set
-        if os.getenv("DHRUVA_ENTERPRISE_ENABLED") is not None:
-            self.enabled = os.getenv("DHRUVA_ENTERPRISE_ENABLED", "false").lower() == "true"
-        if os.getenv("DHRUVA_ENTERPRISE_DEBUG") is not None:
-            self.debug = os.getenv("DHRUVA_ENTERPRISE_DEBUG", "false").lower() == "true"
+        if os.getenv("OBSERVE_UTIL_ENABLED") is not None:
+            self.enabled = os.getenv("OBSERVE_UTIL_ENABLED", "false").lower() == "true"
+        if os.getenv("OBSERVE_UTIL_DEBUG") is not None:
+            self.debug = os.getenv("OBSERVE_UTIL_DEBUG", "false").lower() == "true"
         
-        # Always override customers and apps from environment
-        self.customers = self._parse_list(os.getenv("DHRUVA_ENTERPRISE_CUSTOMERS", "default"))
-        self.apps = self._parse_list(os.getenv("DHRUVA_ENTERPRISE_APPS", "default"))
+        self.metrics_path = os.getenv("OBSERVE_UTIL_METRICS_PATH", self.metrics_path)
+        self.health_path = os.getenv("OBSERVE_UTIL_HEALTH_PATH", self.health_path)
         
-        self.default_customer = os.getenv("DHRUVA_ENTERPRISE_DEFAULT_CUSTOMER", self.default_customer)
-        self.default_app = os.getenv("DHRUVA_ENTERPRISE_DEFAULT_APP", self.default_app)
-        
-        self.metrics_path = os.getenv("DHRUVA_ENTERPRISE_METRICS_PATH", self.metrics_path)
-        self.health_path = os.getenv("DHRUVA_ENTERPRISE_HEALTH_PATH", self.health_path)
-        
-        self.collect_system_metrics = os.getenv("DHRUVA_ENTERPRISE_COLLECT_SYSTEM_METRICS", "true").lower() == "true"                                                                                                
-        self.collect_gpu_metrics = os.getenv("DHRUVA_ENTERPRISE_COLLECT_GPU_METRICS", "true").lower() == "true"                                                                                                      
-        self.collect_db_metrics = os.getenv("DHRUVA_ENTERPRISE_COLLECT_DB_METRICS", "true").lower() == "true"                                                                                                        
+        self.collect_system_metrics = os.getenv("OBSERVE_UTIL_COLLECT_SYSTEM_METRICS", "true").lower() == "true"                                                                                                
+        self.collect_gpu_metrics = os.getenv("OBSERVE_UTIL_COLLECT_GPU_METRICS", "true").lower() == "true"                                                                                                      
+        self.collect_db_metrics = os.getenv("OBSERVE_UTIL_COLLECT_DB_METRICS", "true").lower() == "true"                                                                                                        
         
         # SLA targets
-        self.availability_target = float(os.getenv("DHRUVA_ENTERPRISE_AVAILABILITY_TARGET", self.availability_target))                                                                                               
-        self.response_time_target = float(os.getenv("DHRUVA_ENTERPRISE_RESPONSE_TIME_TARGET", self.response_time_target))                                                                                            
-        self.throughput_target = float(os.getenv("DHRUVA_ENTERPRISE_THROUGHPUT_TARGET", self.throughput_target))                                                                                                     
+        self.availability_target = float(os.getenv("OBSERVE_UTIL_AVAILABILITY_TARGET", self.availability_target))                                                                                               
+        self.response_time_target = float(os.getenv("OBSERVE_UTIL_RESPONSE_TIME_TARGET", self.response_time_target))                                                                                            
+        self.throughput_target = float(os.getenv("OBSERVE_UTIL_THROUGHPUT_TARGET", self.throughput_target))                                                                                                     
         
         # Advanced settings
-        self.max_completed_requests = int(os.getenv("DHRUVA_ENTERPRISE_MAX_COMPLETED_REQUESTS", self.max_completed_requests))                                                                                        
-        self.metrics_update_interval = int(os.getenv("DHRUVA_ENTERPRISE_METRICS_UPDATE_INTERVAL", self.metrics_update_interval))                                                                                     
-        self.system_metrics_interval = int(os.getenv("DHRUVA_ENTERPRISE_SYSTEM_METRICS_INTERVAL", self.system_metrics_interval))                                                                                     
-    
-    def _parse_list(self, value: str) -> List[str]:
-        """Parse comma-separated string into list."""
-        if not value:
-            return []
-        return [item.strip() for item in value.split(",") if item.strip()]
-    
-    def is_customer_allowed(self, customer: str) -> bool:
-        """Check if customer is in allowed list."""
-        return customer in self.customers or "default" in self.customers
-    
-    def is_app_allowed(self, app: str) -> bool:
-        """Check if app is in allowed list."""
-        return app in self.apps or "default" in self.apps
+        self.max_completed_requests = int(os.getenv("OBSERVE_UTIL_MAX_COMPLETED_REQUESTS", self.max_completed_requests))                                                                                        
+        self.metrics_update_interval = int(os.getenv("OBSERVE_UTIL_METRICS_UPDATE_INTERVAL", self.metrics_update_interval))                                                                                     
+        self.system_metrics_interval = int(os.getenv("OBSERVE_UTIL_SYSTEM_METRICS_INTERVAL", self.system_metrics_interval))                                                                                     
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert configuration to dictionary."""
         return {
             "enabled": self.enabled,
             "debug": self.debug,
-            "customers": self.customers,
-            "apps": self.apps,
-            "default_customer": self.default_customer,
-            "default_app": self.default_app,
             "metrics_path": self.metrics_path,
             "health_path": self.health_path,
             "collect_system_metrics": self.collect_system_metrics,

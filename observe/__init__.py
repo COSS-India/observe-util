@@ -34,8 +34,7 @@ from .middleware import ObservabilityMiddleware
 from .dashboards import (
     get_dashboard_path,
     get_dashboard_json,
-    list_available_dashboards,
-    AVAILABLE_DASHBOARDS,
+    list_available_dashboards
 )
 
 __all__ = [
@@ -51,7 +50,7 @@ __all__ = [
     # "ManualObservabilityAdapter",
     # Dashboard utilities
     "get_dashboard_path",
-    "get_dashboard_json",
+    "get_dashboard_json"
     "list_available_dashboards",
-    "AVAILABLE_DASHBOARDS",
+    # "AVAILABLE_DASHBOARDS",
 ]
