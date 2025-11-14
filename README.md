@@ -15,10 +15,10 @@ This package is designed for the **Dhruva Platform** and provides plug-and-play 
 ## ✨ Key Features
 
 - **Multi-tenant metrics collection** with organization-level isolation
-- **Automatic service detection** (Translation, TTS, ASR, NER, Transliteration, Text Language detection and OCR)
+- **Automatic service detection** (Translation-NMT, Text to Speech-TTS, Speech to Text-ASR, Image to Text-OCR, Named Entity Recognition-NER, Transliteration, Text Language detection )
 - **Real-time monitoring** via Prometheus and Grafana
-- **Business metrics** - characters, audio seconds processed
-- **Easy integration** - 3 lines of code to get started
+- **Business metrics** - Characters, Tokens, Audio Length, Image size processed
+- **Easy integration** - Few lines of code to get started
 - **Plug-and-play** - Works with any FastAPI application
 - **Pre-built Grafana dashboards** for instant visualization
 
@@ -26,7 +26,7 @@ This package is designed for the **Dhruva Platform** and provides plug-and-play 
 
 ## 📦 What's Included
 
-- **Metrics Collection**: 3+ built-in metrics for requests, errors, latency, and business KPIs
+- **Metrics Configuration**: Three built-in metrics for Latency, Error rate, Payload Size and the ability to configure customised metrics
 - **FastAPI Middleware**: Automatic request tracking and organization identification
 - **Prometheus Integration**: Native Prometheus metrics endpoint
 - **Grafana Dashboards**: Pre-configured dashboard templates
