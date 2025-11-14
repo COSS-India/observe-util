@@ -15,7 +15,7 @@ This package is designed for the **Dhruva Platform** and provides plug-and-play 
 ## ✨ Key Features
 
 - **Multi-tenant metrics collection** with organization-level isolation
-- **Automatic service detection** (Translation, TTS, ASR, NER, etc.)
+- **Automatic service detection** (Translation, TTS, ASR, NER, Transliteration, Text Language detection and OCR)
 - **Real-time monitoring** via Prometheus and Grafana
 - **Business metrics** - characters, audio seconds processed
 - **Easy integration** - 3 lines of code to get started
@@ -26,7 +26,7 @@ This package is designed for the **Dhruva Platform** and provides plug-and-play 
 
 ## 📦 What's Included
 
-- **Metrics Collection**: 50+ built-in metrics for requests, errors, latency, and business KPIs
+- **Metrics Collection**: 3+ built-in metrics for requests, errors, latency, and business KPIs
 - **FastAPI Middleware**: Automatic request tracking and organization identification
 - **Prometheus Integration**: Native Prometheus metrics endpoint
 - **Grafana Dashboards**: Pre-configured dashboard templates
@@ -58,7 +58,7 @@ dhruva/
 │   │   ├── middleware.py
 │   │   ├── metrics.py
 │   │   ├── config.py
-│   │   └── dashboards/
+│   │   └── dashboard-templates/
 │   └── main.py           # Your Dhruva FastAPI app
 ```
 
@@ -125,7 +125,7 @@ scrape_configs:
 
 ### 2. Grafana Dashboard
 
-- Import pre-built dashboards from `observe/dashboards/`
+- Import pre-built dashboard templates from `observe/dashboard-templates/`
 - Create custom dashboards using PromQL queries on metrics defined in `observe/metrics.py`
 - Filter metrics by organization for multi-tenant isolation
 
@@ -184,6 +184,11 @@ Once integrated, the middleware automatically tracks:
 - **TTS**: Characters synthesized
 - **Translation**: Characters translated
 - **ASR**: Audio seconds processed
+- **NER**: Tokens processed
+- **Transliteration**: Characters processed
+- **Text Language Detection**: Characters processed
+- **OCR**: Size of Image processed
+
 
 ### System Metrics
 - CPU usage

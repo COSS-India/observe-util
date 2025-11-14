@@ -34,6 +34,9 @@ class PluginConfig:
     max_completed_requests: int = 1000
     metrics_update_interval: int = 10
     system_metrics_interval: int = 5
+    # Customer / app defaults
+    customers: list = None
+    apps: list = None
     
     def __post_init__(self):
         """Initialize configuration from environment variables."""
@@ -59,6 +62,15 @@ class PluginConfig:
         self.max_completed_requests = int(os.getenv("OBSERVE_UTIL_MAX_COMPLETED_REQUESTS", self.max_completed_requests))                                                                                        
         self.metrics_update_interval = int(os.getenv("OBSERVE_UTIL_METRICS_UPDATE_INTERVAL", self.metrics_update_interval))                                                                                     
         self.system_metrics_interval = int(os.getenv("OBSERVE_UTIL_SYSTEM_METRICS_INTERVAL", self.system_metrics_interval))                                                                                     
+
+        # Defaults for customers/apps
+        if self.customers is None:
+            # try to read from env var (comma separated) or fallback to empty list
+            customers_env = os.getenv("OBSERVE_UTIL_CUSTOMERS", "")
+            self.customers = [c.strip() for c in customers_env.split(",") if c.strip()] if customers_env else []
+        if self.apps is None:
+            apps_env = os.getenv("OBSERVE_UTIL_APPS", "")
+            self.apps = [a.strip() for a in apps_env.split(",") if a.strip()] if apps_env else []
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert configuration to dictionary."""
@@ -76,6 +88,8 @@ class PluginConfig:
             "max_completed_requests": self.max_completed_requests,
             "metrics_update_interval": self.metrics_update_interval,
             "system_metrics_interval": self.system_metrics_interval,
+            "customers": self.customers,
+            "apps": self.apps,
         }
     
     @classmethod
