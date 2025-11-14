@@ -129,6 +129,78 @@ class MetricsCollector:
             registry=self.registry,
         )
 
+        # OCR character tracking (Histogram for percentile calculations)
+        self.enterprise_ocr_characters_processed = Histogram(
+            "telemetry_obsv_ocr_characters_processed",
+            "OCR characters processed per request",
+            ["organization", "app"],
+            buckets=(10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, float("inf")),
+            registry=self.registry,
+        )
+
+        # Transliteration character tracking (Histogram for percentile calculations)
+        self.enterprise_transliteration_characters_processed = Histogram(
+            "telemetry_obsv_transliteration_characters_processed",
+            "Transliteration characters processed per request",
+            ["organization", "app", "source_language", "target_language"],
+            buckets=(10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, float("inf")),
+            registry=self.registry,
+        )
+
+        # Language detection character tracking (Histogram for percentile calculations)
+        self.enterprise_language_detection_characters_processed = Histogram(
+            "telemetry_obsv_language_detection_characters_processed",
+            "Language detection characters processed per request",
+            ["organization", "app"],
+            buckets=(10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, float("inf")),
+            registry=self.registry,
+        )
+
+        # Audio language detection audio length tracking (Histogram for percentile calculations)
+        self.enterprise_audio_lang_detection_seconds_processed = Histogram(
+            "telemetry_obsv_audio_lang_detection_seconds_processed",
+            "Audio language detection audio seconds processed per request",
+            ["organization", "app"],
+            buckets=(1, 5, 10, 30, 50, 60, 120, 300, 600, 1800, 3600, float("inf")),
+            registry=self.registry,
+        )
+
+        # NER token (word) tracking (Histogram for percentile calculations)
+        self.enterprise_ner_tokens_processed = Histogram(
+            "telemetry_obsv_ner_tokens_processed",
+            "NER tokens (words) processed per request",
+            ["organization", "app"],
+            buckets=(1, 5, 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, float("inf")),
+            registry=self.registry,
+        )
+
+        # Speaker diarization audio length tracking (Histogram for percentile calculations)
+        self.enterprise_speaker_diarization_seconds_processed = Histogram(
+            "telemetry_obsv_speaker_diarization_seconds_processed",
+            "Speaker diarization audio seconds processed per request",
+            ["organization", "app"],
+            buckets=(1, 5, 10, 30, 50, 60, 120, 300, 600, 1800, 3600, float("inf")),
+            registry=self.registry,
+        )
+
+        # Language diarization audio length tracking (Histogram for percentile calculations)
+        self.enterprise_language_diarization_seconds_processed = Histogram(
+            "telemetry_obsv_language_diarization_seconds_processed",
+            "Language diarization audio seconds processed per request",
+            ["organization", "app"],
+            buckets=(1, 5, 10, 30, 50, 60, 120, 300, 600, 1800, 3600, float("inf")),
+            registry=self.registry,
+        )
+
+        # Speaker verification audio length tracking (Histogram for percentile calculations)
+        self.enterprise_speaker_verification_seconds_processed = Histogram(
+            "telemetry_obsv_speaker_verification_seconds_processed",
+            "Speaker verification audio seconds processed per request",
+            ["organization", "app"],
+            buckets=(1, 5, 10, 30, 50, 60, 120, 300, 600, 1800, 3600, float("inf")),
+            registry=self.registry,
+        )
+
         # SLA compliance tracking
         self.enterprise_sla_compliance = Gauge(
             "telemetry_obsv_sla_compliance_percent",
@@ -315,6 +387,102 @@ class MetricsCollector:
 
         # Also track as data processing
         self.track_data_processing(organization, app, "asr_audio_seconds", int(audio_seconds))
+
+    def track_ocr_characters(
+        self, organization: str, app: str, characters: int
+    ):
+        """Track OCR character processing."""
+        self.enterprise_ocr_characters_processed.labels(
+            organization=organization, app=app
+        ).observe(characters)
+
+        # Also track as data processing
+        self.track_data_processing(organization, app, "ocr_characters", characters)
+
+    def track_transliteration_characters(
+        self,
+        organization: str,
+        app: str,
+        source_lang: str,
+        target_lang: str,
+        characters: int,
+    ):
+        """Track Transliteration character processing."""
+        self.enterprise_transliteration_characters_processed.labels(
+            organization=organization,
+            app=app,
+            source_language=source_lang,
+            target_language=target_lang,
+        ).observe(characters)
+
+        # Also track as data processing
+        self.track_data_processing(organization, app, "transliteration_characters", characters)
+
+    def track_language_detection_characters(
+        self, organization: str, app: str, characters: int
+    ):
+        """Track Language Detection character processing."""
+        self.enterprise_language_detection_characters_processed.labels(
+            organization=organization, app=app
+        ).observe(characters)
+
+        # Also track as data processing
+        self.track_data_processing(organization, app, "language_detection_characters", characters)
+
+    def track_audio_lang_detection_length(
+        self, organization: str, app: str, audio_seconds: float
+    ):
+        """Track Audio Language Detection audio length processing."""
+        self.enterprise_audio_lang_detection_seconds_processed.labels(
+            organization=organization, app=app
+        ).observe(audio_seconds)
+
+        # Also track as data processing
+        self.track_data_processing(organization, app, "audio_lang_detection_seconds", int(audio_seconds))
+
+    def track_ner_tokens(
+        self, organization: str, app: str, tokens: int
+    ):
+        """Track NER token (word) processing."""
+        self.enterprise_ner_tokens_processed.labels(
+            organization=organization, app=app
+        ).observe(tokens)
+
+        # Also track as data processing
+        self.track_data_processing(organization, app, "ner_tokens", tokens)
+
+    def track_speaker_diarization_length(
+        self, organization: str, app: str, audio_seconds: float
+    ):
+        """Track Speaker Diarization audio length processing."""
+        self.enterprise_speaker_diarization_seconds_processed.labels(
+            organization=organization, app=app
+        ).observe(audio_seconds)
+
+        # Also track as data processing
+        self.track_data_processing(organization, app, "speaker_diarization_seconds", int(audio_seconds))
+
+    def track_language_diarization_length(
+        self, organization: str, app: str, audio_seconds: float
+    ):
+        """Track Language Diarization audio length processing."""
+        self.enterprise_language_diarization_seconds_processed.labels(
+            organization=organization, app=app
+        ).observe(audio_seconds)
+
+        # Also track as data processing
+        self.track_data_processing(organization, app, "language_diarization_seconds", int(audio_seconds))
+
+    def track_speaker_verification_length(
+        self, organization: str, app: str, audio_seconds: float
+    ):
+        """Track Speaker Verification audio length processing."""
+        self.enterprise_speaker_verification_seconds_processed.labels(
+            organization=organization, app=app
+        ).observe(audio_seconds)
+
+        # Also track as data processing
+        self.track_data_processing(organization, app, "speaker_verification_seconds", int(audio_seconds))
 
     def track_component_latency(
         self, organization: str, app: str, component: str, duration: float

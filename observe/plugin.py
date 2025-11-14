@@ -94,11 +94,14 @@ class ObservabilityPlugin:
         """Initialize customer quotas."""
         try:
             for customer in self.config.customers:
-                self.metrics.update_customer_quotas(
-                    customer=customer,
+                # MetricsCollector exposes update_organization_quotas (not update_customer_quotas)
+                # call the correct method and pass the organization name
+                self.metrics.update_organization_quotas(
+                    organization=customer,
                     llm_quota=1000000,  # 1M tokens per month
                     tts_quota=1000000,  # 1M characters per month
-                    nmt_quota=1000000   # 1M characters per month
+                    nmt_quota=1000000,  # 1M characters per month
+                    asr_quota=1000000   # 1M audio-seconds per month (approx)
                 )
         except Exception as e:
             if self.config.debug:
