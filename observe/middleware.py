@@ -70,7 +70,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         # Detect service type
         service_type = self._detect_service_type(path)
         
-        # Extract real character count for TTS, translation, ASR, OCR, Transliteration, NER, Audio Language Detection, Text Language Detection, and Speaker Verification
+        # Extract real character count for TTS, translation, ASR, OCR, Transliteration, NER (tokens), Audio Language Detection, Text Language Detection, and Speaker Verification
         # IMPORTANT: We need to read and restore the body to avoid consuming the stream
         tts_characters = 0
         translation_characters = 0
@@ -79,7 +79,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         transliteration_characters = 0
         language_detection_characters = 0
         audio_lang_detection_length = 0
-        ner_characters = 0
+        ner_tokens = 0
         speaker_verification_length = 0
         speaker_diarization_length = 0
         language_diarization_length = 0
@@ -130,7 +130,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
             elif service_type == "language_diarization":
                 language_diarization_length = self._extract_asr_audio_length_from_body(body_bytes)
             elif service_type == "ner":
-                ner_characters = self._extract_ner_characters_from_body(body_bytes)
+                ner_tokens = self._extract_ner_tokens_from_body(body_bytes)
 
             # Always log extracted language detection characters to ensure tracking is visible in logs
             if language_detection_characters > 0:
@@ -154,8 +154,8 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
                 print(f"📝 Language Detection Characters detected: {language_detection_characters}")
             if audio_lang_detection_length > 0:
                 print(f"🎵 Audio Language Detection Audio length detected: {audio_lang_detection_length:.2f} seconds")
-            if ner_characters > 0:
-                print(f"📝 NER Characters detected: {ner_characters}")
+            if ner_tokens > 0:
+                print(f"📝 NER Tokens (words) detected: {ner_tokens}")
             if speaker_verification_length > 0:
                 print(f"🎵 Speaker Verification Audio length detected: {speaker_verification_length:.2f} seconds")
             if speaker_diarization_length > 0:
@@ -186,7 +186,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
             )
             
             # Track additional metrics based on service type
-            self._track_additional_metrics(organization, app, service_type, path, duration, tts_characters, translation_characters, asr_audio_length, ocr_characters, transliteration_characters, language_detection_characters, audio_lang_detection_length, ner_characters, speaker_verification_length, speaker_diarization_length, language_diarization_length)
+            self._track_additional_metrics(organization, app, service_type, path, duration, tts_characters, translation_characters, asr_audio_length, ocr_characters, transliteration_characters, language_detection_characters, audio_lang_detection_length, ner_tokens, speaker_verification_length, speaker_diarization_length, language_diarization_length)
             
         except Exception as e:
             # Don't let metrics collection break the request
@@ -348,7 +348,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         else:
             return "unknown"
     
-    def _track_additional_metrics(self, organization: str, app: str, service_type: str, path: str, duration: float, tts_characters: int = 0, translation_characters: int = 0, asr_audio_length: float = 0, ocr_characters: int = 0, transliteration_characters: int = 0, language_detection_characters: int = 0, audio_lang_detection_length: float = 0, ner_characters: int = 0, speaker_verification_length: float = 0, speaker_diarization_length: float = 0, language_diarization_length: float = 0):
+    def _track_additional_metrics(self, organization: str, app: str, service_type: str, path: str, duration: float, tts_characters: int = 0, translation_characters: int = 0, asr_audio_length: float = 0, ocr_characters: int = 0, transliteration_characters: int = 0, language_detection_characters: int = 0, audio_lang_detection_length: float = 0, ner_tokens: int = 0, speaker_verification_length: float = 0, speaker_diarization_length: float = 0, language_diarization_length: float = 0):
         """Track additional metrics based on service type."""
         try:
             # Track component latency
@@ -446,15 +446,15 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
                     if self.config.debug:
                         print(f"📊 Tracked real audio language detection audio length: {audio_lang_detection_length:.2f} seconds")
             elif service_type == "ner":
-                # Track real NER character count
-                if ner_characters > 0:
-                    self.metrics_collector.track_ner_characters(
+                # Track real NER token (word) count
+                if ner_tokens > 0:
+                    self.metrics_collector.track_ner_tokens(
                         organization=organization,
                         app=app,
-                        characters=ner_characters
+                        tokens=ner_tokens
                     )
                     if self.config.debug:
-                        print(f"📊 Tracked real NER characters: {ner_characters}")
+                        print(f"📊 Tracked real NER tokens (words): {ner_tokens}")
             elif service_type == "speaker_verification":
                 # Track real speaker verification audio length
                 if speaker_verification_length > 0:
@@ -666,8 +666,8 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
                 print(f"⚠️ Failed to extract language detection characters: {e}")
             return 0
     
-    def _extract_ner_characters_from_body(self, body_bytes: bytes) -> int:
-        """Extract real character count from NER request body."""
+    def _extract_ner_tokens_from_body(self, body_bytes: bytes) -> int:
+        """Extract real token (word) count from NER request body."""
         try:
             if not body_bytes:
                 return 0
@@ -675,18 +675,22 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
             # Parse JSON request
             request_data = json.loads(body_bytes.decode('utf-8'))
             
-            # Extract character count from NER input
-            total_characters = 0
+            # Extract token (word) count from NER input
+            total_tokens = 0
             if 'input' in request_data:
                 for input_item in request_data['input']:
                     if 'source' in input_item:
-                        total_characters += len(input_item['source'])
+                        source_text = input_item['source']
+                        # Count words by splitting on whitespace
+                        # This handles multiple spaces, tabs, newlines, etc.
+                        words = source_text.split()
+                        total_tokens += len(words)
             
-            return total_characters
+            return total_tokens
             
         except Exception as e:
             if self.config.debug:
-                print(f"⚠️ Failed to extract NER characters: {e}")
+                print(f"⚠️ Failed to extract NER tokens: {e}")
             return 0
     
     def _extract_asr_audio_length_from_body(self, body_bytes: bytes) -> float:

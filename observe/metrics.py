@@ -165,12 +165,12 @@ class MetricsCollector:
             registry=self.registry,
         )
 
-        # NER character tracking (Histogram for percentile calculations)
-        self.enterprise_ner_characters_processed = Histogram(
-            "telemetry_obsv_ner_characters_processed",
-            "NER characters processed per request",
+        # NER token (word) tracking (Histogram for percentile calculations)
+        self.enterprise_ner_tokens_processed = Histogram(
+            "telemetry_obsv_ner_tokens_processed",
+            "NER tokens (words) processed per request",
             ["organization", "app"],
-            buckets=(10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, float("inf")),
+            buckets=(1, 5, 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, float("inf")),
             registry=self.registry,
         )
 
@@ -440,16 +440,16 @@ class MetricsCollector:
         # Also track as data processing
         self.track_data_processing(organization, app, "audio_lang_detection_seconds", int(audio_seconds))
 
-    def track_ner_characters(
-        self, organization: str, app: str, characters: int
+    def track_ner_tokens(
+        self, organization: str, app: str, tokens: int
     ):
-        """Track NER character processing."""
-        self.enterprise_ner_characters_processed.labels(
+        """Track NER token (word) processing."""
+        self.enterprise_ner_tokens_processed.labels(
             organization=organization, app=app
-        ).observe(characters)
+        ).observe(tokens)
 
         # Also track as data processing
-        self.track_data_processing(organization, app, "ner_characters", characters)
+        self.track_data_processing(organization, app, "ner_tokens", tokens)
 
     def track_speaker_diarization_length(
         self, organization: str, app: str, audio_seconds: float

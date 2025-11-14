@@ -19,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 0,
+  "id": 121,
   "links": [],
   "panels": [
     {
@@ -1100,7 +1100,7 @@
         "type": "prometheus",
         "uid": "kdjfS_R7c"
       },
-      "description": "Median number of Image Size in KBs processed by the OCR service.",
+      "description": "Median number of Image Size (KBs) processed by the OCR service.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1158,7 +1158,7 @@
           "refId": "A"
         }
       ],
-      "title": "OCR Payload Size (KBs)",
+      "title": "OCR Payload Size (Image Size - KB)",
       "type": "stat"
     },
     {
@@ -1166,7 +1166,7 @@
         "type": "prometheus",
         "uid": "kdjfS_R7c"
       },
-      "description": "Median number of characters processed by the NER service.",
+      "description": "Median number of tokens processed by the NER service.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,13 +1218,13 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_ner_characters_processed_bucket{\n      organization=~\"$organization\"\n    }[1d])\n  ) by (le)\n)",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_ner_tokens_processed_bucket{\n      organization=~\"$organization\"\n    }[1d])\n  ) by (le)\n)",
           "legendFormat": "Data Units Processed (24h)",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "NER Payload Size (Characters)",
+      "title": "NER Payload Size (Tokens)",
       "type": "stat"
     },
     {
@@ -1505,7 +1505,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0",
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "editorMode": "code",
@@ -1566,14 +1566,13 @@
           "fields": "",
           "values": false
         },
-        "sort": "desc",
         "tooltip": {
           "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0",
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -1647,7 +1646,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0",
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "editorMode": "code",
@@ -1707,14 +1706,13 @@
           "fields": "",
           "values": false
         },
-        "sort": "desc",
         "tooltip": {
           "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0",
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -1788,7 +1786,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0",
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "editorMode": "code",
@@ -1849,14 +1847,13 @@
           "fields": "",
           "values": false
         },
-        "sort": "desc",
         "tooltip": {
           "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0",
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -1930,7 +1927,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0",
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "editorMode": "code",
@@ -1991,14 +1988,13 @@
           "fields": "",
           "values": false
         },
-        "sort": "desc",
         "tooltip": {
           "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0",
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -2072,7 +2068,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0",
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "editorMode": "code",
@@ -2133,14 +2129,13 @@
           "fields": "",
           "values": false
         },
-        "sort": "desc",
         "tooltip": {
           "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0",
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -2214,7 +2209,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.2.0",
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "editorMode": "code",
@@ -2275,14 +2270,13 @@
           "fields": "",
           "values": false
         },
-        "sort": "desc",
         "tooltip": {
           "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "12.2.0",
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "datasource": {
@@ -2359,5 +2353,5 @@
   "timezone": "browser",
   "title": "Dhruva DevOps Operations Dashboard-v4",
   "uid": "dhruva-devops-operational-dashboard-v4",
-  "version": 6
+  "version": 11
 }

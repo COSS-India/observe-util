@@ -184,6 +184,11 @@ Once integrated, the middleware automatically tracks:
 - **TTS**: Characters synthesized
 - **Translation**: Characters translated
 - **ASR**: Audio seconds processed
+- **NER**: Tokens processed
+- **Transliteration**: Characters processed
+- **Text Language Detection**: Characters processed
+- **OCR**: Size of Image processed
+
 
 ### System Metrics
 - CPU usage
