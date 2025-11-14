@@ -76,6 +76,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         translation_characters = 0
         asr_audio_length = 0
         ocr_characters = 0
+        ocr_image_size_kb = 0.0
         transliteration_characters = 0
         language_detection_characters = 0
         audio_lang_detection_length = 0
@@ -117,6 +118,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
                 asr_audio_length = self._extract_asr_audio_length_from_body(body_bytes)
             elif service_type == "ocr":
                 ocr_characters = self._extract_ocr_characters_from_body(body_bytes)
+                ocr_image_size_kb = self._extract_ocr_image_size_kb_from_body(body_bytes)
             elif service_type == "transliteration":
                 transliteration_characters = self._extract_transliteration_characters_from_body(body_bytes)
             elif service_type == "language_detection":
@@ -148,6 +150,8 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
                 print(f"🎵 ASR Audio length detected: {asr_audio_length:.2f} seconds")
             if ocr_characters > 0:
                 print(f"📝 OCR Characters detected: {ocr_characters}")
+            if ocr_image_size_kb > 0:
+                print(f"📊 OCR Image size detected: {ocr_image_size_kb:.2f} KB")
             if transliteration_characters > 0:
                 print(f"📝 Transliteration Characters detected: {transliteration_characters}")
             if language_detection_characters > 0:
@@ -186,7 +190,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
             )
             
             # Track additional metrics based on service type
-            self._track_additional_metrics(organization, app, service_type, path, duration, tts_characters, translation_characters, asr_audio_length, ocr_characters, transliteration_characters, language_detection_characters, audio_lang_detection_length, ner_tokens, speaker_verification_length, speaker_diarization_length, language_diarization_length)
+            self._track_additional_metrics(organization, app, service_type, path, duration, tts_characters, translation_characters, asr_audio_length, ocr_characters, ocr_image_size_kb, transliteration_characters, language_detection_characters, audio_lang_detection_length, ner_tokens, speaker_verification_length, speaker_diarization_length, language_diarization_length)
             
         except Exception as e:
             # Don't let metrics collection break the request
@@ -348,7 +352,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         else:
             return "unknown"
     
-    def _track_additional_metrics(self, organization: str, app: str, service_type: str, path: str, duration: float, tts_characters: int = 0, translation_characters: int = 0, asr_audio_length: float = 0, ocr_characters: int = 0, transliteration_characters: int = 0, language_detection_characters: int = 0, audio_lang_detection_length: float = 0, ner_tokens: int = 0, speaker_verification_length: float = 0, speaker_diarization_length: float = 0, language_diarization_length: float = 0):
+    def _track_additional_metrics(self, organization: str, app: str, service_type: str, path: str, duration: float, tts_characters: int = 0, translation_characters: int = 0, asr_audio_length: float = 0, ocr_characters: int = 0, ocr_image_size_kb: float = 0.0, transliteration_characters: int = 0, language_detection_characters: int = 0, audio_lang_detection_length: float = 0, ner_tokens: int = 0, speaker_verification_length: float = 0, speaker_diarization_length: float = 0, language_diarization_length: float = 0):
         """Track additional metrics based on service type."""
         try:
             # Track component latency
@@ -413,6 +417,15 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
                     )
                     if self.config.debug:
                         print(f"📊 Tracked real OCR characters: {ocr_characters}")
+                # Track OCR image payload size in KB
+                if ocr_image_size_kb > 0:
+                    self.metrics_collector.track_ocr_image_size(
+                        organization=organization,
+                        app=app,
+                        image_size_kb=ocr_image_size_kb
+                    )
+                    if self.config.debug:
+                        print(f"📊 Tracked OCR image size: {ocr_image_size_kb:.2f} KB")
             elif service_type == "transliteration":
                 # Track real transliteration character count
                 if transliteration_characters > 0:
@@ -781,6 +794,38 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
                     print(f"❌ Fallback estimation also failed: {fallback_error}")
                 return 0.0
     
+    def _extract_ocr_image_size_kb_from_body(self, body_bytes: bytes) -> float:
+        """Extract image payload size in KB from OCR request body."""
+        try:
+            if not body_bytes:
+                return 0.0
+            
+            # Parse JSON request
+            request_data = json.loads(body_bytes.decode('utf-8'))
+            
+            total_size_kb = 0.0
+            
+            # Check direct OCR format: {"image": [...]}
+            if 'image' in request_data:
+                for image_item in request_data['image']:
+                    if 'imageContent' in image_item:
+                        # Calculate size from base64 string
+                        total_size_kb += len(image_item['imageContent']) / 1024
+            
+            # Check pipeline format: {"inputData": {"image": [...]}}
+            if 'inputData' in request_data and 'image' in request_data['inputData']:
+                for image_item in request_data['inputData']['image']:
+                    if 'imageContent' in image_item:
+                        # Calculate size from base64 string
+                        total_size_kb += len(image_item['imageContent']) / 1024
+            
+            return total_size_kb
+            
+        except Exception as e:
+            if self.config.debug:
+                print(f"⚠️ Failed to extract OCR image size: {e}")
+            return 0.0
+
     def _calculate_sla_compliance(self, service_type: str, duration: float) -> float:
         """Calculate SLA compliance based on service type and duration."""
         # Mock SLA compliance calculation

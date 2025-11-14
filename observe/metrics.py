@@ -137,6 +137,14 @@ class MetricsCollector:
             buckets=(10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, float("inf")),
             registry=self.registry,
         )
+        # OCR image size tracking (Histogram for percentile calculations)
+        self.enterprise_ocr_image_size_kb = Histogram(
+            "telemetry_obsv_ocr_image_size_kb",
+            "OCR image payload size in kilobytes per request",
+            ["organization", "app"],
+            buckets=(10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, float("inf")),
+            registry=self.registry,
+        )
 
         # Transliteration character tracking (Histogram for percentile calculations)
         self.enterprise_transliteration_characters_processed = Histogram(
@@ -398,6 +406,16 @@ class MetricsCollector:
 
         # Also track as data processing
         self.track_data_processing(organization, app, "ocr_characters", characters)
+    def track_ocr_image_size(
+        self, organization: str, app: str, image_size_kb: float
+    ):
+        """Track OCR image payload size in KB."""
+        self.enterprise_ocr_image_size_kb.labels(
+            organization=organization, app=app
+        ).observe(image_size_kb)
+
+        # Also track as data processing
+        self.track_data_processing(organization, app, "ocr_image_kb", int(image_size_kb))
 
     def track_transliteration_characters(
         self,
