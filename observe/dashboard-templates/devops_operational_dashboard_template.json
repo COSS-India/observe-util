@@ -697,7 +697,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
+        "w": 24,
         "x": 0,
         "y": 25
       },
@@ -738,151 +738,6 @@
       ],
       "title": "NER Latency (Seconds)",
       "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "kdjfS_R7c"
-      },
-      "description": "Median length of the input audio sent to the ASR service.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 25
-      },
-      "id": 26,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.2.0",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_asr_audio_seconds_processed_bucket{\r\n      organization=~\"$organization\"\r\n    }[1d])\r\n  ) by (le)\r\n)",
-          "legendFormat": "Data Units Processed (24h)",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "ASR Payload Size (Seconds)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "kdjfS_R7c"
-      },
-      "description": "Median number of characters processed by the TTS service.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 25
-      },
-      "id": 24,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.2.0",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_tts_characters_synthesized_bucket{\r\n      organization=~\"$organization\"\r\n    }[1d])\r\n  ) by (le)\r\n)\r\n",
-          "legendFormat": "Characters (24h)",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "kdjfS_R7c"
-          },
-          "editorMode": "code",
-          "expr": "telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/tts\"}",
-          "hide": true,
-          "instant": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "TTS Payload Size (Characters)",
-      "type": "stat"
     },
     {
       "datasource": {
@@ -968,7 +823,7 @@
         "type": "prometheus",
         "uid": "kdjfS_R7c"
       },
-      "description": "Median number of characters processed by the Transliteration service.",
+      "description": "Median length of the input audio sent to the ASR service.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -988,7 +843,7 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "s"
         },
         "overrides": []
       },
@@ -998,7 +853,7 @@
         "x": 8,
         "y": 33
       },
-      "id": 201,
+      "id": 26,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -1020,13 +875,13 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_transliteration_characters_processed_bucket{\n      organization=~\"$organization\"\n    }[1d])\n  ) by (le)\n)",
+          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_asr_audio_seconds_processed_bucket{\r\n      organization=~\"$organization\"\r\n    }[1d])\r\n  ) by (le)\r\n)",
           "legendFormat": "Data Units Processed (24h)",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Transliteration Payload Size (Characters)",
+      "title": "ASR Payload Size (Seconds)",
       "type": "stat"
     },
     {
@@ -1034,7 +889,7 @@
         "type": "prometheus",
         "uid": "kdjfS_R7c"
       },
-      "description": "Median number of characters processed by the Text Language Detection service.",
+      "description": "Median number of characters processed by the TTS service.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1064,7 +919,7 @@
         "x": 16,
         "y": 33
       },
-      "id": 202,
+      "id": 24,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -1086,13 +941,26 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_language_detection_characters_processed_bucket{\n      organization=~\"$organization\"\n    }[1d])\n  ) by (le)\n)",
-          "legendFormat": "Data Units Processed (24h)",
+          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_tts_characters_synthesized_bucket{\r\n      organization=~\"$organization\"\r\n    }[1d])\r\n  ) by (le)\r\n)\r\n",
+          "legendFormat": "Characters (24h)",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "kdjfS_R7c"
+          },
+          "editorMode": "code",
+          "expr": "telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/tts\"}",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
         }
       ],
-      "title": "Text Language Detection Payload Size (Characters)",
+      "title": "TTS Payload Size (Characters)",
       "type": "stat"
     },
     {
@@ -1166,7 +1034,7 @@
         "type": "prometheus",
         "uid": "kdjfS_R7c"
       },
-      "description": "Median number of tokens processed by the NER service.",
+      "description": "Median number of characters processed by the Transliteration service.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1195,6 +1063,138 @@
         "w": 8,
         "x": 8,
         "y": 41
+      },
+      "id": 201,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_transliteration_characters_processed_bucket{\n      organization=~\"$organization\"\n    }[1d])\n  ) by (le)\n)",
+          "legendFormat": "Data Units Processed (24h)",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Transliteration Payload Size (Characters)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "kdjfS_R7c"
+      },
+      "description": "Median number of characters processed by the Text Language Detection service.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 41
+      },
+      "id": 202,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_language_detection_characters_processed_bucket{\n      organization=~\"$organization\"\n    }[1d])\n  ) by (le)\n)",
+          "legendFormat": "Data Units Processed (24h)",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Text Language Detection Payload Size (Characters)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "kdjfS_R7c"
+      },
+      "description": "Median number of tokens processed by the NER service.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 49
       },
       "id": 204,
       "options": {
@@ -1260,7 +1260,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 49
+        "y": 55
       },
       "id": 21,
       "options": {
@@ -1343,7 +1343,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 54
+        "y": 60
       },
       "id": 32,
       "options": {
@@ -1385,7 +1385,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "fixedColor": "light-orange",
+            "mode": "palette-classic-by-name"
           },
           "custom": {
             "hideFrom": {
@@ -1404,7 +1405,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 54
+        "y": 60
       },
       "id": 27,
       "options": {
@@ -1485,7 +1486,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 62
+        "y": 68
       },
       "id": 34,
       "options": {
@@ -1528,7 +1529,7 @@
         "defaults": {
           "color": {
             "fixedColor": "light-red",
-            "mode": "palette-classic"
+            "mode": "palette-classic-by-name"
           },
           "custom": {
             "hideFrom": {
@@ -1547,7 +1548,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 62
+        "y": 68
       },
       "id": 28,
       "options": {
@@ -1628,7 +1629,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 70
+        "y": 76
       },
       "id": 33,
       "options": {
@@ -1671,7 +1672,7 @@
         "defaults": {
           "color": {
             "fixedColor": "light-red",
-            "mode": "shades"
+            "mode": "palette-classic-by-name"
           },
           "custom": {
             "hideFrom": {
@@ -1689,7 +1690,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 70
+        "y": 76
       },
       "id": 11,
       "options": {
@@ -1770,7 +1771,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 78
+        "y": 84
       },
       "id": 208,
       "options": {
@@ -1813,7 +1814,7 @@
         "defaults": {
           "color": {
             "fixedColor": "light-red",
-            "mode": "shades"
+            "mode": "palette-classic-by-name"
           },
           "custom": {
             "hideFrom": {
@@ -1832,7 +1833,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 78
+        "y": 84
       },
       "id": 216,
       "options": {
@@ -1913,7 +1914,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 86
+        "y": 92
       },
       "id": 212,
       "options": {
@@ -1955,7 +1956,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "palette-classic-by-name"
           },
           "custom": {
             "hideFrom": {
@@ -1974,7 +1975,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 86
+        "y": 92
       },
       "id": 220,
       "options": {
@@ -2055,7 +2056,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 94
+        "y": 100
       },
       "id": 209,
       "options": {
@@ -2097,7 +2098,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "palette-classic-by-name"
           },
           "custom": {
             "hideFrom": {
@@ -2116,7 +2117,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 94
+        "y": 100
       },
       "id": 217,
       "options": {
@@ -2197,7 +2198,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 102
+        "y": 108
       },
       "id": 210,
       "options": {
@@ -2239,7 +2240,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "palette-classic-by-name"
           },
           "custom": {
             "hideFrom": {
@@ -2258,7 +2259,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 102
+        "y": 108
       },
       "id": 218,
       "options": {
@@ -2362,5 +2363,5 @@
   "timezone": "browser",
   "title": "Dhruva DevOps Operations Dashboard-v5",
   "uid": "dhruva-devops-operational-dashboard-v5",
-  "version": 12
+  "version": 24
 }
