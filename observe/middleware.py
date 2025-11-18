@@ -48,7 +48,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         body_already_read = False
         
         # For generic /pipeline endpoint, we need to check the request body to determine the specific endpoint
-        # This is because the frontend calls /services/inference/pipeline instead of /services/inference/pipeline/txt-lang-detection
+        # This is because the frontend may call /services/inference/pipeline instead of specific endpoints
         if method == "POST" and (path.endswith("/pipeline") or path == "/services/inference/pipeline") and "/pipeline/" not in path:
             # Read body to detect task type (will be restored later)
             body_bytes = await request.body()
@@ -294,12 +294,14 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         """Detect service type from URL path."""
         path_lower = path.lower()
         
-        # IMPORTANT: Check specific pipeline patterns FIRST before generic patterns
-        # This ensures specific endpoints like /services/inference/pipeline/txt-lang-detection
-        # are matched correctly and the full path is preserved in metrics
+        # IMPORTANT: Check specific endpoints FIRST before generic patterns
+        # This ensures specific endpoints are matched correctly and the full path is preserved in metrics
         
-        # Pipeline text language detection endpoint (txt-lang-detection) - check FIRST
-        if any(pattern in path_lower for pattern in ["/services/inference/pipeline/txt-lang-detection", "/services/inference/pipeline/txt-language-detection", "/pipeline/txt-lang-detection"]):
+        # Dedicated text language detection endpoint (txt-lang-detection) - check FIRST
+        if any(pattern in path_lower for pattern in ["/services/inference/txt-lang-detection", "/inference/txt-lang-detection", "/txt-lang-detection"]):
+            return "language_detection"
+        # Pipeline text language detection endpoint (txt-lang-detection) - check SECOND
+        elif any(pattern in path_lower for pattern in ["/services/inference/pipeline/txt-lang-detection", "/services/inference/pipeline/txt-language-detection", "/pipeline/txt-lang-detection"]):
             return "language_detection"
         # Pipeline OCR endpoint
         elif any(pattern in path_lower for pattern in ["/services/inference/pipeline/ocr", "/pipeline/ocr"]):
