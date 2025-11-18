@@ -79,7 +79,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_request_duration_seconds_bucket{\r\n      organization=~\"$organization\", \r\n      app=~\"$app\", \r\n      endpoint=~\"/services/inference/.*\"\r\n    }[1d])\r\n  ) by (le)\r\n)\r\n",
+          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_request_duration_seconds_bucket{\r\n      organization=~\"$organization\", \r\n      app=~\"$app\", \r\n      endpoint=~\"/services/inference/.*\"\r\n    }[$__range])\r\n  ) by (le)\r\n)\r\n",
           "hide": false,
           "legendFormat": "Average Latency",
           "range": true,
@@ -176,7 +176,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_request_duration_seconds_bucket{\r\n      organization=~\"$organization\", \r\n      app=~\"$app\", \r\n      endpoint=~\"/services/inference/.*\"\r\n    }[1d])\r\n  ) by (le)\r\n)\r\n",
+          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_request_duration_seconds_bucket{\r\n      organization=~\"$organization\", \r\n      app=~\"$app\", \r\n      endpoint=~\"/services/inference/.*\"\r\n    }[$__range])\r\n  ) by (le)\r\n)\r\n",
           "hide": false,
           "legendFormat": "Median Latency",
           "range": true,
@@ -247,8 +247,9 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/asr\"\n    }[1d])\n  ) by (le)\n)",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/asr\"\n    }[$__range])\n  ) by (le)\n)",
           "hide": false,
+          "interval": "",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -326,7 +327,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/tts\"\n    }[1d])\n  ) by (le)\n)",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/tts\"\n    }[$__range])\n  ) by (le)\n)",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
@@ -405,7 +406,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/translation\"\n    }[1d])\n  ) by (le)\n)",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/translation\"\n    }[3h])\n  ) by (le)\n)",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
@@ -446,7 +447,7 @@
               },
               {
                 "color": "orange",
-                "value": 0.5
+                "value": 0.4
               },
               {
                 "color": "red",
@@ -484,7 +485,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/pipeline/ocr\"\n    }[1d])\n  ) by (le)\n)",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/pipeline/ocr\"\n    }[$__range])\n  ) by (le)\n)",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
@@ -525,11 +526,11 @@
               },
               {
                 "color": "orange",
-                "value": 0.5
+                "value": 0.1
               },
               {
                 "color": "red",
-                "value": 0.9
+                "value": 0.5
               }
             ]
           },
@@ -563,7 +564,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/transliteration\"\n    }[1d])\n  ) by (le)\n)",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/transliteration\"\n    }[$__range])\n  ) by (le)\n)",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
@@ -604,11 +605,11 @@
               },
               {
                 "color": "orange",
-                "value": 0.3
+                "value": 0.05
               },
               {
                 "color": "red",
-                "value": 0.7
+                "value": 0.2
               }
             ]
           },
@@ -642,7 +643,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/pipeline/txt-lang-detection\"\n    }[1d])\n  ) by (le)\n)",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/txt-lang-detection\"\n    }[$__range])\n  ) by (le)\n)",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
@@ -683,11 +684,11 @@
               },
               {
                 "color": "orange",
-                "value": 0.5
+                "value": 0.2
               },
               {
                 "color": "red",
-                "value": 0.9
+                "value": 0.7
               }
             ]
           },
@@ -721,7 +722,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/ner\"\n    }[1d])\n  ) by (le)\n)",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_request_duration_seconds_bucket{\n      organization=~\"$organization\",\n      app=~\"$app\",\n      endpoint=\"/services/inference/ner\"\n    }[$__range])\n  ) by (le)\n)",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
@@ -796,7 +797,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_nmt_characters_translated_bucket{\r\n      organization=~\"$organization\"\r\n    }[1d])\r\n  ) by (le)\r\n)\r\n",
+          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_nmt_characters_translated_bucket{\r\n      organization=~\"$organization\"\r\n    }[$__range])\r\n  ) by (le)\r\n)\r\n",
           "legendFormat": "Characters Translated (24h)",
           "range": true,
           "refId": "A"
@@ -875,7 +876,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_asr_audio_seconds_processed_bucket{\r\n      organization=~\"$organization\"\r\n    }[1d])\r\n  ) by (le)\r\n)",
+          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_asr_audio_seconds_processed_bucket{\r\n      organization=~\"$organization\"\r\n    }[$__range])\r\n  ) by (le)\r\n)",
           "legendFormat": "Data Units Processed (24h)",
           "range": true,
           "refId": "A"
@@ -941,7 +942,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_tts_characters_synthesized_bucket{\r\n      organization=~\"$organization\"\r\n    }[1d])\r\n  ) by (le)\r\n)\r\n",
+          "expr": "histogram_quantile(\r\n  0.5,\r\n  sum(\r\n    rate(telemetry_obsv_tts_characters_synthesized_bucket{\r\n      organization=~\"$organization\"\r\n    }[$__range])\r\n  ) by (le)\r\n)\r\n",
           "legendFormat": "Characters (24h)",
           "range": true,
           "refId": "A"
@@ -1020,7 +1021,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_ocr_image_size_kb_bucket{\n      organization=~\"$organization\"\n    }[1d])\n  ) by (le)\n)",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_ocr_image_size_kb_bucket{\n      organization=~\"$organization\"\n    }[$__range])\n  ) by (le)\n)",
           "legendFormat": "Data Units Processed (24h)",
           "range": true,
           "refId": "A"
@@ -1086,7 +1087,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_transliteration_characters_processed_bucket{\n      organization=~\"$organization\"\n    }[1d])\n  ) by (le)\n)",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_transliteration_characters_processed_bucket{\n      organization=~\"$organization\"\n    }[$__range])\n  ) by (le)\n)",
           "legendFormat": "Data Units Processed (24h)",
           "range": true,
           "refId": "A"
@@ -1152,7 +1153,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_language_detection_characters_processed_bucket{\n      organization=~\"$organization\"\n    }[1d])\n  ) by (le)\n)",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_language_detection_characters_processed_bucket{\n      organization=~\"$organization\"\n    }[$__range])\n  ) by (le)\n)",
           "legendFormat": "Data Units Processed (24h)",
           "range": true,
           "refId": "A"
@@ -1218,7 +1219,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_ner_tokens_processed_bucket{\n      organization=~\"$organization\"\n    }[1d])\n  ) by (le)\n)",
+          "expr": "histogram_quantile(\n  0.5,\n  sum(\n    rate(telemetry_obsv_ner_tokens_processed_bucket{\n      organization=~\"$organization\"\n    }[$__range])\n  ) by (le)\n)",
           "legendFormat": "Data Units Processed (24h)",
           "range": true,
           "refId": "A"
@@ -1288,7 +1289,7 @@
             "uid": "kdjfS_R7c"
           },
           "editorMode": "code",
-          "expr": "sum(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=~\"/services/inference/.*\"})\r\n/\r\nsum(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=~\"/services/inference/.*\"})\r\n* 100",
+          "expr": "sum(increase(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=~\"/services/inference/.*\"}[$__range]))\r\n/\r\nsum(increase(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=~\"/services/inference/.*\"}[$__range]))\r\n* 100\r\n",
           "hide": false,
           "instant": false,
           "legendFormat": "__auto",
@@ -1331,7 +1332,7 @@
               },
               {
                 "color": "red",
-                "value": 5
+                "value": 25
               }
             ]
           },
@@ -1367,7 +1368,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "100 * (\r\n  sum(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/asr\"})\r\n  /\r\n  sum(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/asr\"})\r\n)",
+          "expr": "100 *\r\n(\r\n  sum(increase(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/asr\"}[$__range]))\r\n  /\r\n  sum(increase(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/asr\"}[$__range]))\r\n)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1441,7 +1442,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "100 * sum by(status_code) (\r\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/asr\"}\r\n)\r\n/\r\nscalar(\r\n    sum(\r\n        telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/asr\"}\r\n    )\r\n)",
+          "expr": "100 *\r\nsum by(status_code)(\r\n  increase(\r\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/asr\"}[$__range]\r\n  )\r\n)\r\n/\r\nscalar(\r\n  sum(\r\n    increase(\r\n      telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/asr\"}[$__range]\r\n    )\r\n  )\r\n)\r\n",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -1474,7 +1475,7 @@
               },
               {
                 "color": "red",
-                "value": 5
+                "value": 50
               }
             ]
           },
@@ -1510,7 +1511,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "100 * (\r\n  sum(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/translation\"})\r\n  /\r\n  sum(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/translation\"})\r\n)",
+          "expr": "100 *\r\n(\r\n  sum(increase(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/translation\"}[$__range]))\r\n  /\r\n  sum(increase(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/translation\"}[$__range]))\r\n)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1584,7 +1585,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "100 *\r\nsum by(status_code) (\r\n  telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/translation\"}\r\n)\r\n/\r\nscalar(\r\n  sum(\r\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/translation\"}\r\n  )\r\n)\r\n",
+          "expr": "100 *\r\nsum by(status_code)(\r\n  increase(\r\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/translation\"}[$__range]\r\n  )\r\n)\r\n/\r\nscalar(\r\n  sum(\r\n    increase(\r\n      telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/translation\"}[$__range]\r\n    )\r\n  )\r\n)\r\n",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -1617,7 +1618,7 @@
               },
               {
                 "color": "red",
-                "value": 2
+                "value": 10
               }
             ]
           },
@@ -1653,7 +1654,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "100 * (\r\n  sum(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/tts\"})\r\n  /\r\n  sum(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/tts\"})\r\n)",
+          "expr": "100 *\r\n(\r\n  sum(increase(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/tts\"}[$__range]))\r\n  /\r\n  sum(increase(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/tts\"}[$__range]))\r\n)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1726,7 +1727,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "100 * sum by(status_code) (\r\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/tts\"}\r\n)\r\n/\r\nscalar(\r\n    sum(\r\n        telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/tts\"}\r\n    )\r\n)\r\n",
+          "expr": "100 *\r\nsum by(status_code)(\r\n  increase(\r\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/tts\"}[$__range]\r\n  )\r\n)\r\n/\r\nscalar(\r\n  sum(\r\n    increase(\r\n      telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/tts\"}[$__range]\r\n    )\r\n  )\r\n)\r\n",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -1759,7 +1760,7 @@
               },
               {
                 "color": "red",
-                "value": 1
+                "value": 10
               }
             ]
           },
@@ -1795,7 +1796,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "100 * (\n  sum(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/ocr\"})\n  /\n  sum(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/ocr\"})\n)",
+          "expr": "100 *\n(\n  sum(increase(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/ocr\"}[$__range]))\n  /\n  sum(increase(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/ocr\"}[$__range]))\n)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1869,7 +1870,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "100 * sum by(status_code) (\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/ocr\"}\n)\n/\nscalar(\n    sum(\n        telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/ocr\"}\n    )\n)",
+          "expr": "100 *\nsum by(status_code)(\n  increase(\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/ocr\"}[$__range]\n  )\n)\n/\nscalar(\n  sum(\n    increase(\n      telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/ocr\"}[$__range]\n    )\n  )\n)\n",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -1902,7 +1903,7 @@
               },
               {
                 "color": "red",
-                "value": 5
+                "value": 10
               }
             ]
           },
@@ -1938,7 +1939,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "100 * (\n  sum(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/ner\"})\n  /\n  sum(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/ner\"})\n)",
+          "expr": "100 *\n(\n  sum(increase(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/ner\"}[$__range]))\n  /\n  sum(increase(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/ner\"}[$__range]))\n)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -2011,7 +2012,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "100 * sum by(status_code) (\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/ner\"}\n)\n/\nscalar(\n    sum(\n        telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/ner\"}\n    )\n)",
+          "expr": "100 *\nsum by(status_code)(\n  increase(\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/ner\"}[$__range]\n  )\n)\n/\nscalar(\n  sum(\n    increase(\n      telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/ner\"}[$__range]\n    )\n  )\n)\n",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -2080,7 +2081,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "100 * (\n  sum(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/transliteration\"})\n  /\n  sum(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/transliteration\"})\n)",
+          "expr": "100 *\n(\n  sum(increase(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/transliteration\"}[$__range]))\n  /\n  sum(increase(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/transliteration\"}[$__range]))\n)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -2153,7 +2154,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "100 * sum by(status_code) (\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/transliteration\"}\n)\n/\nscalar(\n    sum(\n        telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/transliteration\"}\n    )\n)",
+          "expr": "100 *\nsum by(status_code)(\n  increase(\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/transliteration\"}[$__range]\n  )\n)\n/\nscalar(\n  sum(\n    increase(\n      telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/transliteration\"}[$__range]\n    )\n  )\n)\n",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -2222,7 +2223,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "100 * (\n  sum(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/txt-lang-detection\"})\n  /\n  sum(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/txt-lang-detection\"})\n)",
+          "expr": "100 *\n(\n  sum(increase(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/txt-lang-detection\"}[$__range]))\n  /\n  sum(increase(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/txt-lang-detection\"}[$__range]))\n)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -2295,7 +2296,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "100 * sum by(status_code) (\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/txt-lang-detection\"}\n)\n/\nscalar(\n    sum(\n        telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/txt-lang-detection\"}\n    )\n)",
+          "expr": "100 *\nsum by(status_code)(\n  increase(\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/txt-lang-detection\"}[$__range]\n  )\n)\n/\nscalar(\n  sum(\n    increase(\n      telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/txt-lang-detection\"}[$__range]\n    )\n  )\n)\n",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -2356,12 +2357,12 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Dhruva DevOps Operations Dashboard-v5",
-  "uid": "dhruva-devops-operational-dashboard-v5",
-  "version": 24
+  "title": "Dhruva DevOps Operations Dashboard-v6",
+  "uid": "dhruva-devops-operational-dashboard-v6",
+  "version": 29
 }
