@@ -129,6 +129,8 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
                 speaker_verification_length = self._extract_asr_audio_length_from_body(body_bytes)
             elif service_type == "speaker_diarization":
                 speaker_diarization_length = self._extract_asr_audio_length_from_body(body_bytes)
+                if self.config.debug:
+                    print(f"🔍 Speaker Diarization: Extracted audio length: {speaker_diarization_length:.2f} seconds")
             elif service_type == "language_diarization":
                 language_diarization_length = self._extract_asr_audio_length_from_body(body_bytes)
             elif service_type == "ner":
@@ -315,6 +317,15 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         # Pipeline speaker verification endpoint
         elif any(pattern in path_lower for pattern in ["/services/inference/pipeline/speaker-verification", "/pipeline/speaker-verification"]):
             return "speaker_verification"
+        # Dedicated speaker diarization endpoint - check before pipeline
+        elif any(pattern in path_lower for pattern in ["/services/inference/speaker-diarization", "/inference/speaker-diarization", "/speaker-diarization"]):
+            return "speaker_diarization"
+        # Dedicated language diarization endpoint - check before pipeline
+        elif any(pattern in path_lower for pattern in ["/services/inference/language-diarization", "/inference/language-diarization", "/language-diarization"]):
+            return "language_diarization"
+        # Dedicated audio language detection endpoint
+        elif any(pattern in path_lower for pattern in ["/services/inference/audio-lang-detection", "/inference/audio-lang-detection", "/audio-lang-detection"]):
+            return "audio_lang_detection"
         # Pipeline speaker diarization endpoint
         elif any(pattern in path_lower for pattern in ["/services/inference/pipeline/speaker-diarization", "/pipeline/speaker-diarization"]):
             return "speaker_diarization"
@@ -339,10 +350,10 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
             return "language_detection"
         elif any(pattern in path_lower for pattern in ["/ner", "/entity", "/entities"]):
             return "ner"
-        elif any(pattern in path_lower for pattern in ["/speaker", "/speaker-enrollment", "/speaker-verification"]):
-            return "speaker_verification"
         elif any(pattern in path_lower for pattern in ["/speaker-diarization", "/speaker-diarization-compute-call"]):
             return "speaker_diarization"
+        elif any(pattern in path_lower for pattern in ["/speaker", "/speaker-enrollment", "/speaker-verification"]):
+            return "speaker_verification"
         elif any(pattern in path_lower for pattern in ["/language-diarization", "/language-diarization-compute-call"]):
             return "language_diarization"
         elif any(pattern in path_lower for pattern in ["/llm", "/generate", "/chat", "/completion"]):
@@ -482,6 +493,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
                         print(f"📊 Tracked real speaker verification audio length: {speaker_verification_length:.2f} seconds")
             elif service_type == "speaker_diarization":
                 # Track real speaker diarization audio length
+                # Always track, even if length is 0, to ensure metrics are initialized
                 if speaker_diarization_length > 0:
                     self.metrics_collector.track_speaker_diarization_length(
                         organization=organization,
@@ -490,6 +502,16 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
                     )
                     if self.config.debug:
                         print(f"📊 Tracked real speaker diarization audio length: {speaker_diarization_length:.2f} seconds")
+                else:
+                    # Track with 0 length to ensure histogram is initialized
+                    # This ensures the metric exists in Prometheus even if no valid audio was detected
+                    if self.config.debug:
+                        print(f"⚠️ Speaker diarization audio length is 0 or could not be extracted. Tracking with 0.0 seconds.")
+                    self.metrics_collector.track_speaker_diarization_length(
+                        organization=organization,
+                        app=app,
+                        audio_seconds=0.0
+                    )
             elif service_type == "language_diarization":
                 # Track real language diarization audio length
                 if language_diarization_length > 0:

@@ -24,7 +24,7 @@ The Dhruva Observability Package provides comprehensive monitoring, metrics trac
 ## ✨ Key Features
 
 - **Multi-tenant metrics collection** with organization-level isolation
-- **Automatic service detection** (Translation, TTS, ASR, NER, etc.)
+- **Automatic service detection** (Translation, TTS, ASR, OCR, NER, Transliteration, Text Language Detection, Speaker Diarization, Language Diarization, Audio Language Detection, etc.)
 - **Real-time monitoring** via Prometheus and Grafana
 - **Business metrics** - characters, audio seconds processed
 - **Easy integration** - 3 lines of code to get started
@@ -225,7 +225,10 @@ Once integrated, the middleware automatically tracks:
 ### Business Metrics
 - **TTS**: Characters synthesized
 - **Translation**: Characters translated
-- **ASR**: Audio seconds processed
+- **ASR**: Audio Length in seconds
+- **Speaker Diarization**: Audio Length in seconds
+- **Language Diarization**: Audio Length in seconds
+- **Audio Language Detection**: Audio Length in seconds
 
 ### System Metrics
 - CPU usage
