@@ -19,7 +19,7 @@
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
-    "id": 137,
+    "id": 0,
     "links": [],
     "panels": [
       {
@@ -1803,7 +1803,7 @@
         "targets": [
           {
             "editorMode": "code",
-            "expr": "100 *\r\n(\r\n  sum(increase(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/asr\"}[$__range]))\r\n  /\r\n  sum(increase(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/asr\"}[$__range]))\r\n)",
+            "expr": "100 *\r\n(\r\n  sum(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/asr\"})\r\n  /\r\n  sum(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/asr\"})\r\n)",
             "legendFormat": "__auto",
             "range": true,
             "refId": "A"
@@ -2231,7 +2231,7 @@
         "targets": [
           {
             "editorMode": "code",
-            "expr": "100 *\n(\n  sum(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/ocr\"})\n  /\n  sum(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/ocr\"})\n)",
+            "expr": "100 *\n(\n  sum(telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/ocr\"})\n  /\n  sum(telemetry_obsv_requests_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/ocr\"})\n)",
             "legendFormat": "__auto",
             "range": true,
             "refId": "A"
@@ -2305,7 +2305,7 @@
             },
             "disableTextWrap": false,
             "editorMode": "code",
-            "expr": "100 *\nsum by(status_code)(\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/ocr\"}\n)\n/\nscalar(\n  sum(\n      telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/ocr\"}\n  )\n)",
+            "expr": "100 *\nsum by(status_code)(\n    telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/ocr\"}\n)\n/\nscalar(\n  sum(\n      telemetry_obsv_errors_total{organization=~\"$organization\", endpoint=\"/services/inference/pipeline/ocr\"}\n  )\n)",
             "fullMetaSearch": false,
             "hide": false,
             "includeNullMetadata": true,
@@ -3218,12 +3218,12 @@
       ]
     },
     "time": {
-      "from": "now-1h",
+      "from": "now-5m",
       "to": "now"
     },
     "timepicker": {},
     "timezone": "browser",
     "title": "Dhruva DevOps Operations Dashboard-v8",
     "uid": "dhruva-devops-operational-dashboard-v8",
-    "version": 44
+    "version": 51
   }
