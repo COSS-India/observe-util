@@ -23,5 +23,43 @@ This package is designed for the **Dhruva Platform** and provides plug-and-play 
 - **Plug-and-play** - Works with any FastAPI application
 - **Grafana Dashboards**: Pre-configured dashboard templates
 
+---
+
+## 📊 Grafana Dashboard Screenshots
+
+Get a visual overview of the monitoring capabilities provided by `observe-util`. The pre-configured Grafana dashboards offer comprehensive insights into your application's performance, errors, and resource usage.
+
+### Payload Size Metrics
+
+Track the volume of data processed by each service with real-time payload size metrics.
+
+![Payload Size Metrics Dashboard](images/grafana_payload_size.png)
+
+### Error Rate Monitoring
+
+Monitor service health with real-time error rate tracking and detailed breakdowns by error type. The dashboard provides percentage-based error rates and visualizations showing the distribution of different error types. 
+
+![Error Rate Dashboard](images/grafana_error_rate.png)
+
+### Latency Metrics
+
+Visualize service performance with color-coded gauge charts displaying latency metrics for all services. The gauges provide instant visual feedback with green (good), orange (warning), and red (critical) performance thresholds.
+
+![Latency Metrics Dashboard](images/grafana_latency.png)
+
+---
+
+## 🔍 Prometheus Metrics
+
+The `observe-util` package exposes metrics in Prometheus format, enabling detailed querying and analysis of your application's telemetry data. All metrics are collected with multi-tenant support, allowing you to filter and analyze data by organization, service, endpoint, and more.
+
+### Metrics Query Example
+
+Query the `telemetry_obsv_requests_total` metric to analyze request patterns, view request counts across different endpoints, organizations, and HTTP status codes. This enables detailed analysis of API usage patterns and service health.
+
+![Prometheus Metrics Query](images/prometheus_metrics.png)
+
+---
+
 Please check https://github.com/COSS-India/observe-util/wiki for detailed documentation
 
